@@ -1,0 +1,16 @@
+[Unit]
+Description=SyadAgentic TokenHarbor Telegram Notifier Daemon
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/farm/tokenharbor
+Environment="PATH=/home/ubuntu/farm/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+Slice=syadagentic.slice
+ExecStart=/home/ubuntu/farm/venv/bin/python /home/ubuntu/farm/tokenharbor/th_tg_notifier.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

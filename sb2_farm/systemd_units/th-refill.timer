@@ -1,0 +1,9 @@
+[Unit]
+Description=Refill TH clean pool every 10m
+
+[Timer]
+OnBootSec=2m
+OnUnitActiveSec=10m
+
+[Install]
+WantedBy=timers.target

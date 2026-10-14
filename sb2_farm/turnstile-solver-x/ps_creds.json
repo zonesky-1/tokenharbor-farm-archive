@@ -1,0 +1,6 @@
+{
+ "email": "pse8ea5cdce8@maxxspace.com",
+ "password": "Ps!wH_tFgGoRxx4cZi9Q38",
+ "resp": "{\"access_token\":\"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9hcGkucHJveHlzY3JhcGUuY29tXC92NFwvYWNjb3VudFwvYXV0aFwvcmVnaXN0ZXIiLCJpYXQiOjE3OTE1NDcyOTIsImV4cCI6MTc5MTYzMzY5MiwibmJmIjoxNzkxNTQ3MjkyLCJqdGkiOiJuTFl1dlFvN1psVHc2NmVMIiwic3ViIjoiYzY3ZjQxYmEtMmY5OS00MGU5LWI2MzYtYzEwMGU5MzUxNjUyIiwicHJ2IjoiYzhlZTFmYzg5ZTc3NWVjNGM3Mzg2NjdlNWJlMTdhNTkwYjZkNDBmYyJ9.KRQcYTpkC9DmFHcNA5itm0QzlzjxWdLDQowIy4lom-c\",\"token_type\":\"bearer\",\"expires_in\":86400,\"userData\":{\"id\":\"c67f41ba-2f99-40e9-b636-c100e9351652\",\"email\":\"pse8ea5cdce8@maxxspace.com\",\"password\":null,\"EmailVerified\":false,\"associatedSubaccounts\":[],\"created\":1791547291,\"verificationCode\":null,\"otp\":null,\"otp_expiration\":null,\"first_name\":null,\"last_name\":null,\"lastVerificationCodeReset\":1791546991,\"onboarding_completed\":false,\"provider\":\"account\",\"emailId\":\"1a439e76-b201-4420-a363-6e3854f030f8\"}}",
+ "ts": 1791547293.476085
+}

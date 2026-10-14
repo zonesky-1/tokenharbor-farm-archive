@@ -1,0 +1,16 @@
+# ============================================================
+#  TokenHarbour Farm - dependensi program
+#  Pasang dengan:
+#      pip install -r requirements.txt
+#  Catatan: butuh Python >= 3.10 (direkomendasikan 3.14)
+#
+#  Setelah terpasang, siapkan browser sekali saja:
+#      python -m camoufox fetch          (browser Camoufox)
+#      Chrome asli dipakai lewat channel='chrome'
+#      sehingga Google Chrome harus terinstall di sistem
+# ============================================================
+
+requests>=2.34.2
+playwright>=1.60.0
+camoufox>=0.5.5
+curl_cffi>=0.16.1

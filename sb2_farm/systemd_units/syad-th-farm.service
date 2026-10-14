@@ -1,0 +1,17 @@
+[Unit]
+Description=SyadAgentic TokenHarbor Farm Runner (4 Workers)
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/home/ubuntu/farm/tokenharbor
+Environment="DISPLAY=:99"
+Environment="PATH=/home/ubuntu/farm/venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+Slice=syadagentic.slice
+ExecStart=/home/ubuntu/farm/venv/bin/python /home/ubuntu/farm/tokenharbor/auto_farm_loop.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

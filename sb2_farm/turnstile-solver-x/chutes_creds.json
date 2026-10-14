@@ -1,0 +1,8 @@
+{
+ "username": "syadjckvm31",
+ "userId": "8564d6ff-8629-560a-9be5-6a67461a201e",
+ "fingerprint": "RxRIFKXO8e534tbw4zypQkif7npKhVER",
+ "apiKey": "cpk_afd1144ed1da412581fe948c54062044.8564d6ff8629560a9be56a67461a201e.u8payD5MJEuwaQtIyghYqMGXbUmccHmM",
+ "signup_api": "POST /api/auth/signup {username}",
+ "ts": 1791549889.4602802
+}

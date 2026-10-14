@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+import os, sys, time, random, subprocess, signal
+from concurrent.futures import ThreadPoolExecutor
+PROXY_FILE = "/home/ubuntu/farm/proxyfarm/th_proxy_unused_alive.txt"
+
+VENV_PY = "/home/ubuntu/farm/venv/bin/python"
+SCRIPT = "/home/ubuntu/farm/tokenharbor/tokenharbor.py"
+NUM_WORKERS = 12
+
+def kill_proc_tree(p):
+    try:
+        os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+    except Exception:
+        pass
+
+def run_worker(worker_id):
+    time.sleep(worker_id * 8)
+    while True:
+        cmd = [VENV_PY, SCRIPT, "--count", "1", "--fast", "--label", f"w{worker_id}"]
+        p = None
+        # ── proxy rotation: 1 IP segar per attempt (bypass ratelimit per-IP) ──
+        child_env = dict(os.environ)
+        px = ""
+        try:
+            with open(PROXY_FILE) as pf:
+                pool = [l.strip() for l in pf if l.strip()]
+            if pool:
+                px = random.choice(pool)
+                child_env["BROWSER_PROXY"] = px
+                child_env["TURNSTILE_PROXY"] = px
+        except Exception:
+            pass
+        try:
+            if px:
+                print(f"[W{worker_id}] via proxy {px.split('@')[-1]}", flush=True)
+            else:
+                print(f"[W{worker_id}] via direct IP (pool proxy kosong)", flush=True)
+            p = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                                 text=True, preexec_fn=os.setsid, env=child_env)
+            hit_ratelimit = False
+            try:
+                stdout, _ = p.communicate(timeout=320)
+                try:
+                    with open(f"/tmp/th_w{worker_id}.log", "a") as lf:
+                        lf.write("===== RESULT =====\n" + (stdout or "") + "\n")
+                except Exception:
+                    pass
+                if "ratelimited" in (stdout or ""):
+                    hit_ratelimit = True
+                for line in (stdout or "").splitlines():
+                    if any(k in line for k in ("SAVED:", "[signup]", "[api key]", "=== akun")):
+                        print(f"[W{worker_id}] {line}", flush=True)
+            except subprocess.TimeoutExpired:
+                print(f"[W{worker_id}] Timeout 320s, killing process tree...", flush=True)
+                kill_proc_tree(p)
+                try:
+                    out2, _ = p.communicate(timeout=5)
+                    with open(f"/tmp/th_w{worker_id}.log", "a") as lf:
+                        lf.write("===== TIMEOUT KILLED =====\n" + (out2 or "") + "\n")
+                except Exception:
+                    pass
+                try: p.wait(timeout=5)
+                except Exception: pass
+        except Exception as e:
+            print(f"[W{worker_id}] Err: {e}", flush=True)
+            if p:
+                kill_proc_tree(p)
+
+        if hit_ratelimit:
+            # IP kena rate-limit signup -> cooldown hormati (reset ~1 jam server)
+            for mins in (15, 10, 10):
+                print(f"[W{worker_id}] RATELIMIT -> cooldown {mins} menit...", flush=True)
+                time.sleep(mins * 60)
+                probe = subprocess.run(
+                    [VENV_PY, SCRIPT, "--count", "1", "--fast", "--label", "probe"],
+                    capture_output=True, text=True, timeout=340)
+                if "ratelimited" not in (probe.stdout or ""):
+                    print(f"[W{worker_id}] rate limit CLEAR, lanjut farm", flush=True)
+                    break
+        time.sleep(random.uniform(5, 12))
+
+def main():
+    print(f"[*] TokenHarbor Robust Farm: {NUM_WORKERS} Workers (pg-kill protection active).", flush=True)
+    with ThreadPoolExecutor(max_workers=NUM_WORKERS) as pool:
+        for i in range(1, NUM_WORKERS + 1):
+            pool.submit(run_worker, i)
+
+if __name__ == "__main__":
+    main()

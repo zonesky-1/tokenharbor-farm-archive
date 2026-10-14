@@ -1,0 +1,8 @@
+[Unit]
+Description=TokenHarbor clean proxy pool refill
+
+[Service]
+Type=oneshot
+User=ubuntu
+ExecStart=/home/ubuntu/farm/venv/bin/python /home/ubuntu/farm/tokenharbor/refill_clean_pool.py
+StandardOutput=append:/tmp/th_refill.log
